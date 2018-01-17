@@ -7,16 +7,15 @@ function Article (rawDataObj) {
   this.category = rawDataObj.category;
   this.body = rawDataObj.body;
   this.publishedOn = rawDataObj.publishedOn;
-  console.log(this);
+  // console.log(this);
 }
 
 // REVIEW: Instead of a global `articles = []` array, let's attach this list of all articles directly to the constructor function. Note: it is NOT on the prototype. In JavaScript, functions are themselves objects, which means we can add properties/values to them at any time. In this case, the array relates to ALL of the Article objects, so it does not belong on the prototype, as that would only be relevant to a single instantiated Article.
 Article.all = [];
 
 // COMMENT: Why isn't this method written as an arrow function?
-// the scope of this changes becaus
+//
 Article.prototype.toHtml = function() {
-  console.log('hi');
   let template = Handlebars.compile($('#article-template').text());
 
   this.daysAgo = parseInt((new Date() - new Date(this.publishedOn))/60/60/24/1000);
@@ -26,7 +25,7 @@ Article.prototype.toHtml = function() {
   // PUT YOUR RESPONSE HERE
   this.publishStatus = this.publishedOn ? `published ${this.daysAgo} days ago` : '(draft)';
   this.body = marked(this.body);
-  console.log(this, $(this));
+  console.log(this);
   return template(this);
 };
 
@@ -36,31 +35,32 @@ Article.prototype.toHtml = function() {
 
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
 
-// inside fetchAll() last time it was called as a foreach
+
 Article.loadAll = rawData => {
-  console.log('hi');
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
   rawData.forEach(articleObject => Article.all.push(new Article(articleObject)))
+  Article.all.forEach(article => {
+    $('#articles').append(article.toHtml());
+  });
 }
 
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
 Article.fetchAll = () => {
-  console.log('hi');
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
   if (localStorage.rawData) {
-    console.log(localStorage);
-    Article.loadAll(JSON.parse(localStorage.rawData));
+    console.log(localStorage.rawData);
+    Article.loadAll(localStorage.rawData);
   } else {
+    console.log(localStorage);
     $.getJSON('/data/hackerIpsum.json')
       .then(data => {
-        console.log(data);
+        // console.log(data);
         Article.loadAll(data);
       });
   }
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
   Article.fetchAll();
-  articleView.initIndexPage();
 });
