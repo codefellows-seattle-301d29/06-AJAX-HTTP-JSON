@@ -35,34 +35,32 @@ Article.prototype.toHtml = function() {
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
 // It is called inside fetchAll. instead of being in blogarticles.js it is now json objects in hackerIpsum.json. 
 
-//rawdata???
-Article.loadAll = rawData => {
-  rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
+//rawData is a parameter for functions, rather than representing a set of data in our blogarticles.js as seen before.
 
-  rawData.forEach(articleObject => Article.all.push(new Article(articleObject)))
+Article.loadAll = rawData => {
+  rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
+
+  rawData.forEach(articleObject => Article.all.push(new Article(articleObject)));
 }
 
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
 Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
+  
   if (localStorage.rawData) {
-
     Article.loadAll(JSON.parse(localStorage.rawData));
+    articleView.initIndexPage();
 
   } else {
-    // let rawData = [];
-    $.getJSON('../data/hackerIpsum.json').then(data => console.log(data));
+    $.getJSON('../data/hackerIpsum.json')
+    .then(function(data) { 
+      localStorage.setItem('rawData', JSON.stringify(data));
+      Article.loadAll(data);
+      articleView.initIndexPage();
+    });
+    
+    // we used a get method, and passed in a URL that in our case calls on our local JSON file that is supposed to be emulating a remote data source.
 
-    // $.ajax({
-    //   url: "data/hackerIpsum.json",
-    //   dataType: 'json',
-    //   success: function(rawData) {
-        // $('#articles').html(rawData);
-    //   },
-    //   error: function() {
-    //     alert('error');
-    //   }
-    // })
   }
 }
 
