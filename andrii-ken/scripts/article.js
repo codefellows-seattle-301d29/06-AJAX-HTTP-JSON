@@ -33,7 +33,7 @@ Article.prototype.toHtml = function() {
 // REVIEW: This function will take the rawData, how ever it is provided, and use it to instantiate all the articles. This code is moved from elsewhere, and encapsulated in a simply-named function for clarity.
 
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
-// PUT YOUR RESPONSE HERE
+// we will call this function in fetchAll (). where we will load data from the storage or our local API. and then we will use this function to sort and instantiate new articles.
 Article.loadAll = rawData => {
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
@@ -46,12 +46,22 @@ Article.fetchAll = () => {
   if (localStorage.rawData) {
 
     Article.loadAll(JSON.parse(localStorage.rawData));
+    // articleView.initIndexPage();
 
   } else {
-    
     $.getJSON('/data/hackerIpsum.json').then(function (data){localStorage.rawData = JSON.stringify(data)});
     Article.loadAll(JSON.parse(localStorage.rawData));
 
   }
-  
+    
+  //   $.getJSON('./data/hackerIpsum.json')
+  //     .then(function (data){
+  //       Article.loadAll(data);
+  //       localStorage.rawData = JSON.stringify(data);
+  //       articleView.initIndexPage();
+  //     } , function(err) {
+  //       console.error(err);
+  //     });
+
+  // }
 }
