@@ -47,12 +47,14 @@ Article.fetchAll = () => {
   if (localStorage.rawData) {
 
     Article.loadAll(JSON.parse(localStorage.rawData));
+    articleView.initIndexPage();
 
   } else {
     $.getJSON('data/hackerIpsum.json').then(data => {
       console.log(data);
       localStorage.rawData = JSON.stringify(data);
       Article.loadAll(data);
+      articleView.initIndexPage();
     });
 
   }
