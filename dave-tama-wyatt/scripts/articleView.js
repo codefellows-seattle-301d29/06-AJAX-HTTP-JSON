@@ -119,5 +119,3 @@ articleView.initIndexPage = () => {
   articleView.handleMainNav();
   articleView.setTeasers();
 };
-
-$(document).ready(articleView.initIndexPage);
