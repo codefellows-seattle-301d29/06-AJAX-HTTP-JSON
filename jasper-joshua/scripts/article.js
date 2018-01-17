@@ -33,7 +33,7 @@ Article.prototype.toHtml = function() {
 // REVIEW: This function will take the rawData, how ever it is provided, and use it to instantiate all the articles. This code is moved from elsewhere, and encapsulated in a simply-named function for clarity.
 
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
-// It is called in the Article.fetchAll function; rawData represents the JSON file in our local-storage. We are getting data we stored in our local storage instead of from a file. 
+// It is called in the Article.fetchAll function; rawData represents the JSON file in our local-storage. We are getting data we stored in our local storage or from a remote source and store it to our local storage, instead of from a file. 
 Article.loadAll = rawData => {
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
@@ -48,6 +48,7 @@ Article.fetchAll = () => {
     Article.loadAll();
 
   } else {
-
+    $.getJSON('data/hackerIpsum.json').then(data => localStorage.setItem('rawData', JSON.stringify(data)));
+    //store data as a string to local storage and parse it from local storage as a object. (jasper-joshua.)
   }
 }
