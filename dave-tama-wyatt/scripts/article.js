@@ -50,6 +50,7 @@ Article.fetchAll = () => {
   if (localStorage.rawData) {
 
     Article.loadAll(JSON.parse(localStorage.rawData));
+    articleView.initIndexPage();
 
   } else {
     $.getJSON("../data/hackerIpsum.json", function(data) {
@@ -58,4 +59,5 @@ Article.fetchAll = () => {
       articleView.initIndexPage();
     });
   }
+  
 }
