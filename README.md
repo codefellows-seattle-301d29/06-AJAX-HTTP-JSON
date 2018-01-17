@@ -82,7 +82,7 @@ _Your README.md must include:_
 # 06-AJAX-HTTP-JSON
 
 **Author**: Christian Miller and Brian Bixby
-**Version**: 1.0.0 (increment the patch/fix version number up if you make more commits past your first submission)
+**Version**: 2.0.0 (increment the patch/fix version number up if you make more commits past your first submission)
 
 ## Overview
 This project is an exercise in making AJAX requests, handling the response and displaying the results. On top of this we added a layer of efficiency by setting the AJAX data response set to local storage and then first checking if local storage had the data.
