@@ -3,8 +3,10 @@
 const articleView = {};
 
 articleView.populateFilters = () => {
+  console.log('populateFilters()');
   $('article').each(function() {
     if (!$(this).hasClass('template')) {
+      console.log('does not have class template');
       let val = $(this).find('address a').text();
       let optionTag = `<option value="${val}">${val}</option>`;
 
@@ -22,6 +24,7 @@ articleView.populateFilters = () => {
 };
 
 articleView.handleAuthorFilter = () => {
+  console.log('articleView.handleAuthorFilter()');
   $('#author-filter').on('change', function() {
     if ($(this).val()) {
       $('article').hide();
@@ -35,6 +38,7 @@ articleView.handleAuthorFilter = () => {
 };
 
 articleView.handleCategoryFilter = () => {
+  console.log('handleCategoryFilter');
   $('#category-filter').on('change', function() {
     if ($(this).val()) {
       $('article').hide();
@@ -48,6 +52,7 @@ articleView.handleCategoryFilter = () => {
 };
 
 articleView.handleMainNav = () => {
+  console.log('articleView.handleMainNav');
   $('.main-nav').on('click', '.tab', function() {
     $('.tab-content').hide();
     $(`#${$(this).data('content')}`).fadeIn();
@@ -57,6 +62,7 @@ articleView.handleMainNav = () => {
 };
 
 articleView.setTeasers = () => {
+  console.log('articleView.setTeasers()');
   $('.article-body *:nth-of-type(n+2)').hide();
   $('article').on('click', 'a.read-on', function(e) {
     e.preventDefault();
@@ -74,6 +80,7 @@ articleView.setTeasers = () => {
 };
 
 articleView.initNewArticlePage = () => {
+  console.log('articleView.initNewArticlePage');
   $('.tab-content').show();
   $('#export-field').hide();
   $('#article-json').on('focus', function(){
@@ -84,6 +91,7 @@ articleView.initNewArticlePage = () => {
 };
 
 articleView.create = () => {
+  console.log('articleView.create()');
   let article;
   $('#articles').empty();
 
@@ -107,13 +115,12 @@ articleView.create = () => {
 
 
 articleView.initIndexPage = () => {
-  Article.all.forEach(article => {
-    $('#articles').append(article.toHtml())
-  });
-
+  console.log('articleView.initIndexPage()');
+  Article.fetchAll();
   articleView.populateFilters();
   articleView.handleCategoryFilter();
   articleView.handleAuthorFilter();
   articleView.handleMainNav();
   articleView.setTeasers();
 };
+

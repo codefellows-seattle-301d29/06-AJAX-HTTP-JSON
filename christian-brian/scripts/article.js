@@ -1,5 +1,5 @@
 'use strict';
-console.log('hi');
+
 function Article (rawDataObj) {
   this.author = rawDataObj.author;
   this.authorUrl = rawDataObj.authorUrl;
@@ -25,7 +25,7 @@ Article.prototype.toHtml = function() {
   // PUT YOUR RESPONSE HERE
   this.publishStatus = this.publishedOn ? `published ${this.daysAgo} days ago` : '(draft)';
   this.body = marked(this.body);
-  console.log(this);
+  // console.log(this);
   return template(this);
 };
 
@@ -61,6 +61,6 @@ Article.fetchAll = () => {
   }
 }
 
-$(document).ready(function() {
-  Article.fetchAll();
-});
+// $(document).ready(function() {
+//   Article.fetchAll();
+// });
