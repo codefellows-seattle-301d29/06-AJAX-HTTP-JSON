@@ -13,7 +13,8 @@ function Article (rawDataObj) {
 Article.all = [];
 
 // COMMENT: Why isn't this method written as an arrow function?
-// PUT YOUR RESPONSE HERE
+// Method not written as lexical arrow becuase this function refers to contexual "this".
+
 Article.prototype.toHtml = function() {
   let template = Handlebars.compile($('#article-template').text());
 
@@ -21,7 +22,8 @@ Article.prototype.toHtml = function() {
 
   // COMMENT: What is going on in the line below? What do the question mark and colon represent? How have we seen this same logic represented previously?
   // Not sure? Check the docs!
-  // PUT YOUR RESPONSE HERE
+  // The line below is a ternary operator, these types of operators can take three values of any type and evaluate them based on the condition at the beginning of the operation. The question mark sits before the expressions telling the operator to evaluate the expressions as true or false, if condition is "true" the first value is returned, if condition is "false" the second or third values are returned. 
+
   this.publishStatus = this.publishedOn ? `published ${this.daysAgo} days ago` : '(draft)';
   this.body = marked(this.body);
 
@@ -33,7 +35,7 @@ Article.prototype.toHtml = function() {
 // REVIEW: This function will take the rawData, how ever it is provided, and use it to instantiate all the articles. This code is moved from elsewhere, and encapsulated in a simply-named function for clarity.
 
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
-// PUT YOUR RESPONSE HERE
+// The "Article" function is instantiating rawData object, this is different from previous labs becuase in the past we were taking rawData from JS file, in this case we are instantiating from a JSON file.
 Article.loadAll = rawData => {
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
@@ -48,6 +50,13 @@ Article.fetchAll = () => {
     Article.loadAll();
 
   } else {
-    
-  }
+
+    $.ajax({
+      url: 'data/hackerIpsum.json',
+      method: 'GET',
+      success: function(data) {
+        console.log(data)
+        // This .ajax call method is grabbing the info from the JSON file(remote Source) in the event that the article cannot be loaded from local storage
+    }
+  })
 }
