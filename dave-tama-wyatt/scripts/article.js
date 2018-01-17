@@ -48,16 +48,30 @@ Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
   // This if statement is checking to see if we already have a copy of rawData in localStorage, hence do not need to load the data from the json source.
   if (localStorage.rawData) {
+    $.ajax({
+      url:"../data/hackerIpsum.json",
+      type: "HEAD",
+      success: function(data, message, xhr) {
+        if (xhr.getResponseHeader('ETag') !== JSON.parse(localStorage.ETag)) {
+          localStorage.clear(rawData);
+          Article.fetchAll();
+        }
+      }
+    });
 
     Article.loadAll(JSON.parse(localStorage.rawData));
     articleView.initIndexPage();
 
   } else {
-    $.getJSON("../data/hackerIpsum.json", function(data) {
-      localStorage.rawData = JSON.stringify(data);
-      Article.loadAll(data);
-      articleView.initIndexPage();
+    $.ajax({
+      url:"../data/hackerIpsum.json",
+      type: "GET",
+      success: function(data, message, xhr) {
+        localStorage.rawData = JSON.stringify(data);
+        localStorage.ETag = xhr.getResponseHeader('Etag');
+        Article.loadAll(data);
+        articleView.initIndexPage();
+      }
     });
   }
-  
 }
