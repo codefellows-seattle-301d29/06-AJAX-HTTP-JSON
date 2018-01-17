@@ -47,16 +47,16 @@ Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
   if (localStorage.rawData) {
 
-    Article.loadAll();
-
+    Article.loadAll(JSON.parse(localStorage.rawData));
+    articleView.initIndexPage();
   } else {
-
-    $.ajax({
-      url: 'data/hackerIpsum.json',
-      method: 'GET',
-      success: function(data) {
-        console.log(data)
+    $.getJSON("data/hackerIpsum.json")
+    .then(data => {
+      Article.loadAll(data);
+      articleView.initIndexPage();
+      localStorage.rawData = JSON.stringify(data);
+    });
         // This .ajax call method is grabbing the info from the JSON file(remote Source) in the event that the article cannot be loaded from local storage
-    }
-  })
+  }
 }
+//load before you call the index page. use json file and put initIndextPage in it. stringify json file
