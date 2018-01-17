@@ -40,9 +40,7 @@ Article.loadAll = rawData => {
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
   rawData.forEach(articleObject => Article.all.push(new Article(articleObject)))
-  Article.all.forEach(article => {
-    $('#articles').append(article.toHtml());
-  });
+  articleView.initIndexPage();
 }
 
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
