@@ -83,5 +83,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
     <script src="/scripts/article.js"></script>
     <script src="/scripts/articleView.js"></script>
+    <script>
+      Article.fetchAll();
+    </script>
+    <!-- This method will load after article.js and articleView.js and it calls the function to populate the article object, then retrive the data to render on the home page.-->
   </body>
 </html>
