@@ -117,4 +117,5 @@ articleView.initIndexPage = () => {
   articleView.handleMainNav();
   articleView.setTeasers();
   Article.fetchAll();
+  
 };

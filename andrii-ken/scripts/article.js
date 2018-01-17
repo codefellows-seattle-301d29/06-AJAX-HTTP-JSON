@@ -53,4 +53,5 @@ Article.fetchAll = () => {
     Article.loadAll(JSON.parse(localStorage.rawData));
 
   }
+  
 }
