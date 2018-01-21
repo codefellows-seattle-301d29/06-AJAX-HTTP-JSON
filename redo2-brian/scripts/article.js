@@ -1,5 +1,4 @@
 'use strict';
-
 function Article (rawDataObj) {
   this.author = rawDataObj.author;
   this.authorUrl = rawDataObj.authorUrl;
@@ -15,6 +14,7 @@ Article.all = [];
 // COMMENT: Why isn't this method written as an arrow function?
 // PUT YOUR RESPONSE HERE
 Article.prototype.toHtml = function() {
+  console.log('article.prototype');
   let template = Handlebars.compile($('#article-template').text());
 
   this.daysAgo = parseInt((new Date() - new Date(this.publishedOn))/60/60/24/1000);
@@ -35,19 +35,54 @@ Article.prototype.toHtml = function() {
 // COMMENT: Where is this function called? What does 'rawData' represent now? How is this different from previous labs?
 // PUT YOUR RESPONSE HERE
 Article.loadAll = rawData => {
+  console.log('Article.loadAll');
   rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
 
   rawData.forEach(articleObject => Article.all.push(new Article(articleObject)))
+  articleView.initIndexPage();
 }
 
 // REVIEW: This function will retrieve the data from either a local or remote source, and process it, then hand off control to the View.
 Article.fetchAll = () => {
   // REVIEW: What is this 'if' statement checking for? Where was the rawData set to local storage?
-  if (localStorage.rawData) {
-
-    Article.loadAll();
-
+  console.log('article.fetchAll');
+  if (localStorage.ETag) {
+    $.ajax({
+      type: 'HEAD',
+      url: 'data/hackerIpsum.json',
+      success: function(data, message, xhr) {
+        let ETag = xhr.getResponseHeader('ETag');
+        if(localStorage.ETag === ETag) {
+          console.log('option1');
+          Article.loadAll(JSON.parse(localStorage.rawData));
+        }
+        else {
+          $.ajax({
+            url: 'data/hackerIpsum.json',
+            method: 'GET',
+            success: function(data, message, xhr) {
+              console.log('option2');
+              ETag = xhr.getResponseHeader('ETag');
+              localStorage.setItem('rawData', JSON.stringify(data));
+              localStorage.setItem('ETag', ETag);
+              Article.loadAll(data);
+            }
+          })
+        }
+      }
+    })
   } else {
-
+    $.ajax({
+      url: 'data/hackerIpsum.json',
+      method: 'GET',
+      success: function(data, message, xhr) {
+        console.log('option3');
+        console.log('data', data, 'message', message, 'xhr', xhr);
+        let ETag = xhr.getResponseHeader('ETag');
+        localStorage.setItem('rawData', JSON.stringify(data));
+        localStorage.setItem('ETag', ETag);
+        Article.loadAll(data);
+      }
+    })
   }
 }
